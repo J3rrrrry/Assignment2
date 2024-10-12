@@ -1,24 +1,19 @@
-import React, { useContext } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { DataContext } from '../context/DataContext';
+import React from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import colors from '../Helper/colors';
 
-const ItemsList = ({ type }) => {
-  const { data } = useContext(DataContext);
-  const items = type === 'diet' ? data.diet : data.activities;
-
+const ItemsList = ({ data }) => {
   return (
     <FlatList
-      data={items}
+      data={data}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <View style={styles.itemContainer}>
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.date}>{item.date}</Text>
-          {type === 'diet' ? (
-            <Text style={styles.value}>{item.calories} kcal</Text>
-          ) : (
-            <Text style={styles.value}>{item.duration}</Text>
-          )}
+          <Text style={styles.itemName}>{item.name}</Text>
+          <View style={styles.itemDetails}>
+            <Text style={styles.itemDate}>{item.date}</Text>
+            <Text style={styles.itemValue}>{item.value}</Text>
+          </View>
         </View>
       )}
     />
@@ -27,24 +22,29 @@ const ItemsList = ({ type }) => {
 
 const styles = StyleSheet.create({
   itemContainer: {
+    backgroundColor: colors.primary,
+    marginVertical: 10,
+    padding: 15,
+    borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
-    backgroundColor: '#4e5d94',
-    marginVertical: 5,
-    borderRadius: 5,
+    alignItems: 'center',
   },
-  name: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  date: {
-    color: '#fff',
+  itemName: {
+    color: colors.white,
     fontSize: 16,
   },
-  value: {
-    color: '#fff',
-    fontSize: 16,
+  itemDetails: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  itemDate: {
+    color: colors.white,
+    marginRight: 10,
+  },
+  itemValue: {
+    color: colors.white,
+    fontWeight: 'bold',
   },
 });
 
