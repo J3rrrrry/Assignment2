@@ -1,18 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { ActivityContext } from '../Context/ActivityContext';
-import colors from '../Helper/colors';
+import { ThemeContext } from '../Context/ThemeContext';
 
 const AddActivity = ({ navigation }) => {
   const { setActivityData } = useContext(ActivityContext);
+  const { theme } = useContext(ThemeContext);
   
   const [activityType, setActivityType] = useState(null);
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
     { label: 'Walking', value: 'Walking' },
@@ -53,8 +53,8 @@ const AddActivity = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Activity Type</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.label, { color: theme.primary }]}>Activity Type</Text>
       <DropDownPicker
         open={open}
         value={activityType}
@@ -63,20 +63,20 @@ const AddActivity = ({ navigation }) => {
         setValue={setActivityType}
         setItems={setItems}
         placeholder="Select an activity type"
-        style={styles.dropdown}
+        style={[styles.dropdown, { borderColor: theme.primary, backgroundColor: theme.white }]}
       />
 
-      <Text style={styles.label}>Duration (min)</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Duration (min)</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
         value={duration}
         onChangeText={setDuration}
       />
 
-      <Text style={styles.label}>Date</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Date</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         value={date.toDateString()}
         onFocus={() => setShowDatePicker(true)}
       />
@@ -91,8 +91,8 @@ const AddActivity = ({ navigation }) => {
       )}
 
       <View style={styles.buttonContainer}>
-        <Button title="Save" onPress={validateAndSave} color={colors.accent} />
-        <Button title="Cancel" onPress={() => navigation.goBack()} color={colors.primary} />
+        <Button title="Save" onPress={validateAndSave} color={theme.accent} />
+        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.primary} />
       </View>
     </View>
   );
@@ -102,25 +102,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: colors.background,
   },
   label: {
     fontSize: 16,
     marginBottom: 10,
-    color: colors.primary,
   },
   input: {
     borderWidth: 1,
-    borderColor: colors.primary,
     borderRadius: 8,
     padding: 10,
     marginBottom: 20,
-    backgroundColor: colors.white,
   },
   dropdown: {
     marginBottom: 20,
-    borderColor: colors.primary,
-    backgroundColor: colors.white,
   },
   buttonContainer: {
     flexDirection: 'row',

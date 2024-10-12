@@ -1,11 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { DietContext } from '../Context/DietContext';
-import colors from '../Helper/colors';
+import { ThemeContext } from '../Context/ThemeContext';
 
 const AddDietEntry = ({ navigation }) => {
   const { setDietData } = useContext(DietContext);
+  const { theme } = useContext(ThemeContext);
   
   const [description, setDescription] = useState('');
   const [calories, setCalories] = useState('');
@@ -41,25 +42,25 @@ const AddDietEntry = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Description</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.label, { color: theme.primary }]}>Description</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         value={description}
         onChangeText={setDescription}
       />
 
-      <Text style={styles.label}>Calories</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Calories</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
         value={calories}
         onChangeText={setCalories}
       />
 
-      <Text style={styles.label}>Date</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Date</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         value={date.toDateString()}
         onFocus={() => setShowDatePicker(true)}
       />
@@ -74,8 +75,8 @@ const AddDietEntry = ({ navigation }) => {
       )}
 
       <View style={styles.buttonContainer}>
-        <Button title="Save" onPress={validateAndSave} color={colors.accent} />
-        <Button title="Cancel" onPress={() => navigation.goBack()} color={colors.primary} />
+        <Button title="Save" onPress={validateAndSave} color={theme.accent} />
+        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.primary} />
       </View>
     </View>
   );
@@ -85,20 +86,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: colors.background,
   },
   label: {
     fontSize: 16,
     marginBottom: 10,
-    color: colors.primary,
   },
   input: {
     borderWidth: 1,
-    borderColor: colors.primary,
     borderRadius: 8,
     padding: 10,
     marginBottom: 20,
-    backgroundColor: colors.white,
   },
   buttonContainer: {
     flexDirection: 'row',
