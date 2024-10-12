@@ -16,9 +16,11 @@ const ItemsList = ({ data }) => {
             {item.name || item.description}
           </Text>
           <View style={styles.itemDetails}>
-            <Text style={[styles.itemDate, { color: theme.white }]}>{item.date}</Text>
-            <Text style={[styles.itemValue, { color: theme.white }]}>
-              {item.value || item.calories}
+            <Text style={[styles.itemDate, { backgroundColor: theme.white, color: theme.primary }]}>
+              {item.date}
+            </Text>
+            <Text style={[styles.itemValue, { backgroundColor: theme.white, color: theme.primary }]}>
+              {item.value || `${item.calories}`}
             </Text>
           </View>
         </View>
@@ -41,6 +43,8 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 16,
+    flex: 1,
+    color: '#fff',
   },
   itemDetails: {
     flexDirection: 'row',
@@ -48,9 +52,20 @@ const styles = StyleSheet.create({
   },
   itemDate: {
     marginRight: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 5,
+    color: '#000',
+    minWidth: 100,
   },
   itemValue: {
     fontWeight: 'bold',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 5,
+    color: '#000',
+    minWidth: 60,
+    textAlign: 'center',
   },
 });
 
