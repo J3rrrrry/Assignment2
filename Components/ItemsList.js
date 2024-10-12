@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { useContext } from 'react';
 import { ThemeContext } from '../Context/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
 
 const ItemsList = ({ data }) => {
   const { theme } = useContext(ThemeContext);
@@ -16,6 +17,14 @@ const ItemsList = ({ data }) => {
             {item.name || item.description}
           </Text>
           <View style={styles.itemDetails}>
+            {item.special && (
+              <Ionicons
+                name="warning"
+                size={20}
+                color="#FFC107"
+                style={styles.warningIcon}
+              />
+            )}
             <Text style={[styles.itemDate, { backgroundColor: theme.white, color: theme.primary }]}>
               {item.date}
             </Text>
@@ -66,6 +75,9 @@ const styles = StyleSheet.create({
     color: '#000',
     minWidth: 60,
     textAlign: 'center',
+  },
+  warningIcon: {
+    marginRight: 8,
   },
 });
 
