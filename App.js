@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Diet from './Screens/Diet';
 import Activities from './Screens/Activities';
+import AddActivity from './Screens/AddActivity';
 import colors from './Helper/colors';
 import { DietProvider } from './Context/DietContext';
 import { ActivityProvider } from './Context/ActivityContext';
@@ -41,12 +42,23 @@ const App = () => {
     <ActivityProvider>
       <DietProvider>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: colors.primary,
+              },
+              headerTintColor: colors.white,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            }}
+          >
             <Stack.Screen
               name="Home"
               component={TabNavigator}
               options={{ headerShown: false }}
             />
+            <Stack.Screen name="AddActivity" component={AddActivity} />
           </Stack.Navigator>
         </NavigationContainer>
       </DietProvider>

@@ -1,11 +1,23 @@
-import React, { useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useContext, useLayoutEffect } from 'react';
+import { View, TouchableOpacity, Text, Alert, StyleSheet } from 'react-native';
 import ItemsList from '../Components/ItemsList';
 import { DietContext } from '../Context/DietContext';
 import colors from '../Helper/colors';
 
-const Diet = () => {
+const Diet = ({ navigation }) => {
   const { dietData } = useContext(DietContext);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={() => Alert.alert('Info', 'This button is currently inactive.')}>
+          <Text style={{ color: colors.accent, fontSize: 16, marginRight: 15 }}>
+            Add
+          </Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.screen}>
