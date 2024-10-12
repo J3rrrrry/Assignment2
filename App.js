@@ -13,14 +13,48 @@ import { Ionicons } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+const DietStack = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: colors.primary,
+      },
+      headerTintColor: colors.white,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
+    <Stack.Screen name="DietScreen" component={Diet} options={{ title: 'Diet' }} />
+  </Stack.Navigator>
+);
+
+const ActivitiesStack = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: colors.primary,
+      },
+      headerTintColor: colors.white,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
+    <Stack.Screen name="ActivitiesScreen" component={Activities} options={{ title: 'Activities' }} />
+    <Stack.Screen name="AddActivity" component={AddActivity} options={{ title: 'Add Activity' }} />
+  </Stack.Navigator>
+);
+
 const TabNavigator = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
+      headerShown: false,
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
-        if (route.name === 'Diet') {
+        if (route.name === 'DietTab') {
           iconName = focused ? 'restaurant' : 'restaurant-outline';
-        } else if (route.name === 'Activities') {
+        } else if (route.name === 'ActivitiesTab') {
           iconName = focused ? 'walk' : 'walk-outline';
         }
         return <Ionicons name={iconName} size={size} color={color} />;
@@ -32,8 +66,8 @@ const TabNavigator = () => (
       },
     })}
   >
-    <Tab.Screen name="Diet" component={Diet} />
-    <Tab.Screen name="Activities" component={Activities} />
+    <Tab.Screen name="DietTab" component={DietStack} options={{ title: 'Diet' }} />
+    <Tab.Screen name="ActivitiesTab" component={ActivitiesStack} options={{ title: 'Activities' }} />
   </Tab.Navigator>
 );
 
@@ -58,7 +92,6 @@ const App = () => {
               component={TabNavigator}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="AddActivity" component={AddActivity} />
           </Stack.Navigator>
         </NavigationContainer>
       </DietProvider>
