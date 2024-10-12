@@ -9,10 +9,14 @@ const ItemsList = ({ data }) => {
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <View style={styles.itemContainer}>
-          <Text style={styles.itemName}>{item.name}</Text>
+          <Text style={styles.itemName}>
+          {item.name || item.description}
+          </Text>
           <View style={styles.itemDetails}>
             <Text style={styles.itemDate}>{item.date}</Text>
-            <Text style={styles.itemValue}>{item.value}</Text>
+            <Text style={styles.itemValue}>
+              {item.value || item.calories}
+              </Text>
           </View>
         </View>
       )}

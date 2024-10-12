@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Diet from './Screens/Diet';
 import Activities from './Screens/Activities';
 import AddActivity from './Screens/AddActivity';
+import AddDietEntry from './Screens/AddDietEntry';
 import colors from './Helper/colors';
 import { DietProvider } from './Context/DietContext';
 import { ActivityProvider } from './Context/ActivityContext';
@@ -26,6 +27,7 @@ const DietStack = () => (
     }}
   >
     <Stack.Screen name="DietScreen" component={Diet} options={{ title: 'Diet' }} />
+    <Stack.Screen name="AddDietEntry" component={AddDietEntry} options={{ title: 'Add Diet Entry' }} />
   </Stack.Navigator>
 );
 

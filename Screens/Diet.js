@@ -1,5 +1,5 @@
 import React, { useContext, useLayoutEffect } from 'react';
-import { View, TouchableOpacity, Text, Alert, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import ItemsList from '../Components/ItemsList';
 import { DietContext } from '../Context/DietContext';
 import colors from '../Helper/colors';
@@ -10,7 +10,7 @@ const Diet = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => Alert.alert('Info', 'This button is currently inactive.')}>
+        <TouchableOpacity onPress={() => navigation.navigate('AddDietEntry')}>
           <Text style={{ color: colors.accent, fontSize: 16, marginRight: 15 }}>
             Add
           </Text>
