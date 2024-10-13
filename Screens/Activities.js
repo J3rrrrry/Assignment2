@@ -12,7 +12,7 @@ const Activities = ({ navigation }) => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={() => navigation.navigate('AddActivity')}>
-          <Text style={{ color: theme.accent, fontSize: 16, marginRight: 15 }}>
+          <Text style={{ color: theme.buttonBlue, fontSize: 16, marginRight: 15 }}>
             Add
           </Text>
         </TouchableOpacity>

@@ -58,14 +58,14 @@ const AddDietEntry = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.label, { color: theme.primary }]}>Description</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Description</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         value={description}
         onChangeText={setDescription}
       />
 
-      <Text style={[styles.label, { color: theme.primary }]}>Calories</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Calories</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
@@ -73,7 +73,7 @@ const AddDietEntry = ({ navigation }) => {
         onChangeText={setCalories}
       />
 
-      <Text style={[styles.label, { color: theme.primary }]}>Date</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Date</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         value={date ? date.toDateString() : ''}
@@ -92,8 +92,8 @@ const AddDietEntry = ({ navigation }) => {
       )}
 
       <View style={styles.buttonContainer}>
-        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.accent} />
-        <Button title="Save" onPress={validateAndSave} color={theme.accent} />
+        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.buttonBlue} />
+        <Button title="Save" onPress={validateAndSave} color={theme.buttonBlue} />
       </View>
     </View>
   );

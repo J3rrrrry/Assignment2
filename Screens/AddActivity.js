@@ -69,7 +69,7 @@ const AddActivity = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.label, { color: theme.primary }]}>Activity Type</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Activity Type</Text>
       <DropDownPicker
         open={open}
         value={activityType}
@@ -81,7 +81,7 @@ const AddActivity = ({ navigation }) => {
         style={[styles.dropdown, { borderColor: theme.primary, backgroundColor: theme.white }]}
       />
 
-      <Text style={[styles.label, { color: theme.primary }]}>Duration (min)</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Duration (min)</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
@@ -89,7 +89,7 @@ const AddActivity = ({ navigation }) => {
         onChangeText={setDuration}
       />
 
-      <Text style={[styles.label, { color: theme.primary }]}>Date</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Date</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         value={date ? date.toDateString() : ''}
@@ -108,8 +108,8 @@ const AddActivity = ({ navigation }) => {
       )}
 
       <View style={styles.buttonContainer}>
-        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.accent} />
-        <Button title="Save" onPress={validateAndSave} color={theme.accent} />
+        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.buttonBlue} />
+        <Button title="Save" onPress={validateAndSave} color={theme.buttonBlue} />
       </View>
     </View>
   );
