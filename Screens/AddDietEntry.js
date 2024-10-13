@@ -10,7 +10,7 @@ const AddDietEntry = ({ navigation }) => {
   
   const [description, setDescription] = useState('');
   const [calories, setCalories] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const onChangeDate = (event, selectedDate) => {
@@ -43,14 +43,14 @@ const AddDietEntry = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.label, { color: theme.primary }]}>Description</Text>
+      <Text style={[styles.label, { color: theme.white }]}>Description</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         value={description}
         onChangeText={setDescription}
       />
 
-      <Text style={[styles.label, { color: theme.primary }]}>Calories</Text>
+      <Text style={[styles.label, { color: theme.white }]}>Calories</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
@@ -58,25 +58,26 @@ const AddDietEntry = ({ navigation }) => {
         onChangeText={setCalories}
       />
 
-      <Text style={[styles.label, { color: theme.primary }]}>Date</Text>
+      <Text style={[styles.label, { color: theme.white }]}>Date</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
-        value={date.toDateString()}
+        value={date ? date.toDateString() : ''} 
         onFocus={() => setShowDatePicker(true)}
       />
 
       {showDatePicker && (
         <DateTimePicker
-          value={date}
+          value={date ? new Date(date) : new Date()}
           mode="date"
           display="inline"
           onChange={onChangeDate}
+          style={styles.datePicker} 
         />
       )}
 
       <View style={styles.buttonContainer}>
+        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.accent} />
         <Button title="Save" onPress={validateAndSave} color={theme.accent} />
-        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.primary} />
       </View>
     </View>
   );
@@ -95,12 +96,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: 10,
-    marginBottom: 20,
+    marginBottom: 5,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
+  },
+  datePicker: {
+    width: '100%',
+    transform: [{ scale: 0.8 }],
   },
 });
 

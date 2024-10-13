@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ThemeContext } from '../Context/ThemeContext';
 
 const Settings = () => {
@@ -7,9 +7,12 @@ const Settings = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={styles.buttonContainer}>
-        <Button title="Toggle Theme" onPress={toggleTheme} color={theme.accent} />
-      </View>
+      <TouchableOpacity 
+        onPress={toggleTheme} 
+        style={[styles.button, { backgroundColor: theme.primary }]}
+      >
+        <Text style={[styles.buttonText, { color: theme.white }]}>Toggle Theme</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -20,9 +23,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonContainer: {
-    marginTop: 20,
-    width: '60%',
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    elevation: 2,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

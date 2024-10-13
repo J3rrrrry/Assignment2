@@ -98,8 +98,8 @@ const TabNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="DietTab" component={DietStack} options={{ title: 'Diet' }} />
       <Tab.Screen name="ActivitiesTab" component={ActivitiesStack} options={{ title: 'Activities' }} />
+      <Tab.Screen name="DietTab" component={DietStack} options={{ title: 'Diet' }} />
       <Tab.Screen name="SettingsTab" component={SettingsStack} options={{ title: 'Settings' }} />
     </Tab.Navigator>
   );
