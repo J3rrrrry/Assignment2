@@ -8,7 +8,7 @@ import { ThemeContext } from '../Context/ThemeContext';
 const AddActivity = ({ navigation }) => {
   const { setActivityData } = useContext(ActivityContext);
   const { theme } = useContext(ThemeContext);
-  
+
   const [activityType, setActivityType] = useState(null);
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState('');
@@ -31,8 +31,23 @@ const AddActivity = ({ navigation }) => {
   };
 
   const validateAndSave = () => {
-    if (!activityType || duration === '' || isNaN(duration) || duration <= 0) {
-      Alert.alert('Error', 'Please enter valid values.');
+    if (!activityType) {
+      Alert.alert('Error', 'Please select an activity type.');
+      return;
+    }
+
+    if (duration === '' || isNaN(duration)) {
+      Alert.alert('Error', 'Please enter a valid numeric duration.');
+      return;
+    }
+
+    if (duration <= 0) {
+      Alert.alert('Error', 'Duration must be greater than 0.');
+      return;
+    }
+
+    if (!date) {
+      Alert.alert('Error', 'Please select a date.');
       return;
     }
 
@@ -54,7 +69,7 @@ const AddActivity = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.label, { color: theme.white }]}>Activity Type</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Activity Type</Text>
       <DropDownPicker
         open={open}
         value={activityType}
@@ -66,7 +81,7 @@ const AddActivity = ({ navigation }) => {
         style={[styles.dropdown, { borderColor: theme.primary, backgroundColor: theme.white }]}
       />
 
-      <Text style={[styles.label, { color: theme.white }]}>Duration (min)</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Duration (min)</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
@@ -74,11 +89,12 @@ const AddActivity = ({ navigation }) => {
         onChangeText={setDuration}
       />
 
-      <Text style={[styles.label, { color: theme.white }]}>Date</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Date</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
-        value={date ? date.toDateString() : ''} 
+        value={date ? date.toDateString() : ''}
         onFocus={() => setShowDatePicker(true)}
+        placeholder="Select a date"
       />
 
       {showDatePicker && (

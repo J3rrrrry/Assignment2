@@ -7,7 +7,7 @@ import { ThemeContext } from '../Context/ThemeContext';
 const AddDietEntry = ({ navigation }) => {
   const { setDietData } = useContext(DietContext);
   const { theme } = useContext(ThemeContext);
-  
+
   const [description, setDescription] = useState('');
   const [calories, setCalories] = useState('');
   const [date, setDate] = useState('');
@@ -20,8 +20,23 @@ const AddDietEntry = ({ navigation }) => {
   };
 
   const validateAndSave = () => {
-    if (!description || !calories || isNaN(calories) || calories <= 0) {
-      Alert.alert('Error', 'Please enter valid values for all fields.');
+    if (!description) {
+      Alert.alert('Error', 'Please enter a description.');
+      return;
+    }
+
+    if (calories === '' || isNaN(calories)) {
+      Alert.alert('Error', 'Please enter a valid numeric calorie value.');
+      return;
+    }
+
+    if (calories <= 0) {
+      Alert.alert('Error', 'Calories must be greater than 0.');
+      return;
+    }
+
+    if (!date) {
+      Alert.alert('Error', 'Please select a date.');
       return;
     }
 
@@ -31,7 +46,7 @@ const AddDietEntry = ({ navigation }) => {
       ...prev,
       {
         id: Math.random().toString(),
-        description: description,
+        description,
         calories: parseInt(calories),
         date: date.toDateString(),
         special: isSpecial
@@ -43,14 +58,14 @@ const AddDietEntry = ({ navigation }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.label, { color: theme.white }]}>Description</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Description</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         value={description}
         onChangeText={setDescription}
       />
 
-      <Text style={[styles.label, { color: theme.white }]}>Calories</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Calories</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
@@ -58,11 +73,12 @@ const AddDietEntry = ({ navigation }) => {
         onChangeText={setCalories}
       />
 
-      <Text style={[styles.label, { color: theme.white }]}>Date</Text>
+      <Text style={[styles.label, { color: theme.primary }]}>Date</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
-        value={date ? date.toDateString() : ''} 
+        value={date ? date.toDateString() : ''}
         onFocus={() => setShowDatePicker(true)}
+        placeholder="Select a date"
       />
 
       {showDatePicker && (
@@ -71,7 +87,7 @@ const AddDietEntry = ({ navigation }) => {
           mode="date"
           display="inline"
           onChange={onChangeDate}
-          style={styles.datePicker} 
+          style={styles.datePicker}
         />
       )}
 
