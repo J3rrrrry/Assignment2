@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, TouchableWithoutFeedback, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { DietContext } from '../Context/DietContext';
 import { ThemeContext } from '../Context/ThemeContext';
@@ -10,13 +10,20 @@ const AddDietEntry = ({ navigation }) => {
 
   const [description, setDescription] = useState('');
   const [calories, setCalories] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+    const currentDate = selectedDate || new Date();
     setShowDatePicker(false);
     setDate(currentDate);
+  };
+
+  const toggleDatePicker = () => {
+    if (showDatePicker && !date) {
+      setDate(new Date());
+    }
+    setShowDatePicker(prevState => !prevState);
   };
 
   const validateAndSave = () => {
@@ -74,16 +81,21 @@ const AddDietEntry = ({ navigation }) => {
       />
 
       <Text style={[styles.label, { color: theme.text }]}>Date</Text>
-      <TextInput
-        style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
-        value={date ? date.toDateString() : ''}
-        onFocus={() => setShowDatePicker(true)}
-        placeholder="Select a date"
-      />
+      <TouchableWithoutFeedback onPressIn={toggleDatePicker}>
+        <View>
+          <TextInput
+            style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
+            value={date ? date.toDateString() : ''}
+            editable={false}
+            pointerEvents="none"
+            placeholder="Select a date"
+          />
+        </View>
+      </TouchableWithoutFeedback>
 
       {showDatePicker && (
         <DateTimePicker
-          value={date ? new Date(date) : new Date()}
+          value={date || new Date()}
           mode="date"
           display="inline"
           onChange={onChangeDate}

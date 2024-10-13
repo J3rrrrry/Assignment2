@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, TouchableWithoutFeedback, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { ActivityContext } from '../Context/ActivityContext';
@@ -11,7 +11,7 @@ const AddActivity = ({ navigation }) => {
 
   const [activityType, setActivityType] = useState(null);
   const [duration, setDuration] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
@@ -25,9 +25,18 @@ const AddActivity = ({ navigation }) => {
   ]);
 
   const onChangeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(false);
+    const currentDate = selectedDate || new Date();
     setDate(currentDate);
+    setShowDatePicker(false);
+  };
+
+  const toggleDatePicker = () => {
+    if (showDatePicker) {
+      if (!date) {
+        setDate(new Date());
+      }
+    }
+    setShowDatePicker(prevState => !prevState);
   };
 
   const validateAndSave = () => {
@@ -90,20 +99,25 @@ const AddActivity = ({ navigation }) => {
       />
 
       <Text style={[styles.label, { color: theme.text }]}>Date</Text>
-      <TextInput
-        style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
-        value={date ? date.toDateString() : ''}
-        onFocus={() => setShowDatePicker(true)}
-        placeholder="Select a date"
-      />
+      <TouchableWithoutFeedback onPressIn={toggleDatePicker}>
+        <View>
+          <TextInput
+            style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
+            value={date ? date.toDateString() : ''}
+            editable={false}
+            pointerEvents="none"
+            placeholder="Select a date"
+          />
+        </View>
+      </TouchableWithoutFeedback>
 
       {showDatePicker && (
         <DateTimePicker
-          value={date ? new Date(date) : new Date()}
+          value={date || new Date()}
           mode="date"
           display="inline"
           onChange={onChangeDate}
-          style={styles.datePicker} 
+          style={styles.datePicker}
         />
       )}
 
