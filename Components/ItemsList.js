@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useContext } from 'react';
 import { ThemeContext } from '../Context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 
-const ItemsList = ({ data }) => {
+const ItemsList = ({ data, onPressItem }) => {
   const { theme } = useContext(ThemeContext);
 
   return (
@@ -12,27 +12,29 @@ const ItemsList = ({ data }) => {
       data={data}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <View style={[styles.itemContainer, { backgroundColor: theme.primary }]}>
-          <Text style={[styles.itemName, { color: theme.white }]}>
-            {item.name || item.description}
-          </Text>
-          <View style={styles.itemDetails}>
-            {item.special && (
-              <Ionicons
-                name="warning"
-                size={20}
-                color="#FFC107"
-                style={styles.warningIcon}
-              />
-            )}
-            <Text style={[styles.itemDate, { backgroundColor: theme.white, color: theme.primary }]}>
-              {item.date}
+        <TouchableOpacity onPress={() => onPressItem(item)}>
+          <View style={[styles.itemContainer, { backgroundColor: theme.primary }]}>
+            <Text style={[styles.itemName, { color: theme.white }]}>
+              {item.name || item.description}
             </Text>
-            <Text style={[styles.itemValue, { backgroundColor: theme.white, color: theme.primary }]}>
-              {item.duration ? `${item.duration} mins` : `${item.calories} kcal`}
-            </Text>
+            <View style={styles.itemDetails}>
+              {item.special && (
+                <Ionicons
+                  name="warning"
+                  size={20}
+                  color="#FFC107"
+                  style={styles.warningIcon}
+                />
+              )}
+              <Text style={[styles.itemDate, { backgroundColor: theme.white, color: theme.primary }]}>
+                {item.date}
+              </Text>
+              <Text style={[styles.itemValue, { backgroundColor: theme.white, color: theme.primary }]}>
+                {item.duration ? `${item.duration} mins` : `${item.calories} kcal`}
+              </Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       )}
     />
   );

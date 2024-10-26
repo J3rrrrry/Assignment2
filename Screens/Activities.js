@@ -33,7 +33,10 @@ const Activities = ({ navigation }) => {
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.background }]}>
-      <ItemsList data={activityData} />
+      <ItemsList 
+        data={activityData} 
+        onPressItem={(item) => navigation.navigate('EditActivity', { item })} 
+      />
     </View>
   );
 };

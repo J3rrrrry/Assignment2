@@ -6,9 +6,9 @@ import Diet from './Screens/Diet';
 import Activities from './Screens/Activities';
 import AddActivity from './Screens/AddActivity';
 import AddDietEntry from './Screens/AddDietEntry';
+import EditDietEntry from './Screens/EditDietEntry';
+import EditActivity from './Screens/EditActivity';
 import Settings from './Screens/Settings';
-import { DietProvider } from './Context/DietContext';
-import { ActivityProvider } from './Context/ActivityContext';
 import { ThemeProvider, ThemeContext } from './Context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -31,6 +31,7 @@ const DietStack = () => {
     >
       <Stack.Screen name="DietScreen" component={Diet} options={{ title: 'Diet' }} />
       <Stack.Screen name="AddDietEntry" component={AddDietEntry} options={{ title: 'Add Diet Entry' }} />
+      <Stack.Screen name="EditDietEntry" component={EditDietEntry} options={{ title: 'Edit Diet Entry' }} />
     </Stack.Navigator>
   );
 };
@@ -51,6 +52,7 @@ const ActivitiesStack = () => {
     >
       <Stack.Screen name="ActivitiesScreen" component={Activities} options={{ title: 'Activities' }} />
       <Stack.Screen name="AddActivity" component={AddActivity} options={{ title: 'Add Activity' }} />
+      <Stack.Screen name="EditActivity" component={EditActivity} options={{ title: 'Edit Activity' }} />
     </Stack.Navigator>
   );
 };
@@ -108,13 +110,9 @@ const TabNavigator = () => {
 const App = () => {
   return (
     <ThemeProvider>
-      <ActivityProvider>
-        <DietProvider>
-          <NavigationContainer>
-            <TabNavigator />
-          </NavigationContainer>
-        </DietProvider>
-      </ActivityProvider>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
     </ThemeProvider>
   );
 };

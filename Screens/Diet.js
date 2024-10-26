@@ -33,7 +33,10 @@ const Diet = ({ navigation }) => {
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.background }]}>
-      <ItemsList data={dietData} />
+      <ItemsList 
+        data={dietData} 
+        onPressItem={(item) => navigation.navigate('EditDietEntry', { item })} 
+      />
     </View>
   );
 };
