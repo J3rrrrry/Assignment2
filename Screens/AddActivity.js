@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, TouchableWithoutFeedback, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { ActivityContext } from '../Context/ActivityContext';
 import { ThemeContext } from '../Context/ThemeContext';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const AddActivity = ({ navigation }) => {
   const { setActivityData } = useContext(ActivityContext);
@@ -99,7 +100,7 @@ const AddActivity = ({ navigation }) => {
       />
 
       <Text style={[styles.label, { color: theme.text }]}>Date</Text>
-      <TouchableWithoutFeedback onPressIn={toggleDatePicker}>
+      <Pressable onPressIn={toggleDatePicker}>
         <View>
           <TextInput
             style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
@@ -109,7 +110,7 @@ const AddActivity = ({ navigation }) => {
             placeholder="Select a date"
           />
         </View>
-      </TouchableWithoutFeedback>
+      </Pressable>
 
       {showDatePicker && (
         <DateTimePicker
@@ -122,8 +123,12 @@ const AddActivity = ({ navigation }) => {
       )}
 
       <View style={styles.buttonContainer}>
-        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.buttonBlue} />
-        <Button title="Save" onPress={validateAndSave} color={theme.buttonBlue} />
+        <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </Pressable>
+        <Pressable onPress={validateAndSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
+          <Text style={styles.buttonText}>Save</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -151,6 +156,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    elevation: 2,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'white',
   },
   datePicker: {
     width: '100%',

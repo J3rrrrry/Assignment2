@@ -1,18 +1,19 @@
 import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { ThemeContext } from '../Context/ThemeContext';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const Settings = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <TouchableOpacity 
+      <Pressable 
         onPress={toggleTheme} 
         style={[styles.button, { backgroundColor: theme.primary }]}
       >
         <Text style={[styles.buttonText, { color: theme.white }]}>Toggle Theme</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
@@ -37,4 +38,3 @@ const styles = StyleSheet.create({
 });
 
 export default Settings;
-

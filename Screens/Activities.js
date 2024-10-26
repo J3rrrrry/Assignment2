@@ -1,8 +1,9 @@
 import React, { useContext, useLayoutEffect } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import ItemsList from '../Components/ItemsList';
 import { ActivityContext } from '../Context/ActivityContext';
 import { ThemeContext } from '../Context/ThemeContext';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const Activities = ({ navigation }) => {
   const { activityData } = useContext(ActivityContext);
@@ -11,11 +12,9 @@ const Activities = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('AddActivity')}>
-          <Text style={{ color: theme.buttonBlue, fontSize: 16, marginRight: 15 }}>
-            Add
-          </Text>
-        </TouchableOpacity>
+        <Pressable onPress={() => navigation.navigate('AddActivity')}>
+          <Text style={{ color: theme.buttonBlue, fontSize: 16, marginRight: 15 }}>Add</Text>
+        </Pressable>
       ),
       headerStyle: {
         backgroundColor: theme.primary,
