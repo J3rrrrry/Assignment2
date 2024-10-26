@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TextInput, Alert, StyleSheet, Switch } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ThemeContext } from '../Context/ThemeContext';
 import { updateDB, deleteFromDB } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import { Ionicons } from '@expo/vector-icons';
 
 const EditDietEntry = ({ navigation, route }) => {
   const { theme } = useContext(ThemeContext);
@@ -13,6 +14,16 @@ const EditDietEntry = ({ navigation, route }) => {
   const [date, setDate] = useState(item ? new Date(item.date) : null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [special, setSpecial] = useState(item?.special || false);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable onPress={handleDelete} style={{ marginRight: 15 }}>
+          <Ionicons name="trash" size={24} color={theme.white} />
+        </Pressable>
+      ),
+    });
+  }, [navigation, theme]);
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || new Date();
@@ -24,7 +35,7 @@ const EditDietEntry = ({ navigation, route }) => {
     if (showDatePicker && !date) {
       setDate(new Date());
     }
-    setShowDatePicker(prevState => !prevState);
+    setShowDatePicker((prevState) => !prevState);
   };
 
   const validateAndSave = async () => {
@@ -55,15 +66,27 @@ const EditDietEntry = ({ navigation, route }) => {
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      await deleteFromDB(item.id, 'diet');
-      Alert.alert('Deleted', 'Diet entry deleted successfully!');
-      navigation.goBack();
-    } catch (error) {
-      console.error('Failed to delete diet entry:', error);
-      Alert.alert('Error', 'Failed to delete diet entry');
-    }
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete',
+      'Are you sure you want to delete this item?',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Yes', onPress: async () => {
+            try {
+              await deleteFromDB(item.id, 'diet');
+              Alert.alert('Deleted', 'Diet entry deleted successfully!');
+              navigation.goBack();
+            } catch (error) {
+              console.error('Failed to delete diet entry:', error);
+              Alert.alert('Error', 'Failed to delete diet entry');
+            }
+          }
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (

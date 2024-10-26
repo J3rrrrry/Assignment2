@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import { useContext } from 'react';
 import { ThemeContext } from '../Context/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,7 +12,7 @@ const ItemsList = ({ data, onPressItem }) => {
       data={data}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => onPressItem(item)}>
+        <Pressable onPress={() => onPressItem(item)}>
           <View style={[styles.itemContainer, { backgroundColor: theme.primary }]}>
             <Text style={[styles.itemName, { color: theme.white }]}>
               {item.name || item.description}
@@ -30,11 +30,11 @@ const ItemsList = ({ data, onPressItem }) => {
                 {item.date}
               </Text>
               <Text style={[styles.itemValue, { backgroundColor: theme.white, color: theme.primary }]}>
-                {item.duration ? `${item.duration} mins` : `${item.calories} kcal`}
+                {item.duration ? `${item.duration} mins` : `${item.calories}`}
               </Text>
             </View>
           </View>
-        </TouchableOpacity>
+        </Pressable>
       )}
     />
   );
@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: '#000',
     minWidth: 100,
+    textAlign: 'center',
   },
   itemValue: {
     fontWeight: 'bold',

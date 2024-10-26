@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, TextInput, Alert, StyleSheet, Switch } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { ThemeContext } from '../Context/ThemeContext';
 import { updateDB, deleteFromDB } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import { Ionicons } from '@expo/vector-icons';
 
 const EditActivity = ({ navigation, route }) => {
   const { theme } = useContext(ThemeContext);
@@ -24,6 +25,16 @@ const EditActivity = ({ navigation, route }) => {
     { label: 'Cycling', value: 'Cycling' },
     { label: 'Hiking', value: 'Hiking' },
   ]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable onPress={handleDelete} style={{ marginRight: 15 }}>
+          <Ionicons name="trash" size={24} color={theme.white} />
+        </Pressable>
+      ),
+    });
+  }, [navigation, theme]);
 
   const toggleDatePicker = () => {
     if (showDatePicker && !date) {
@@ -67,14 +78,27 @@ const EditActivity = ({ navigation, route }) => {
   };
 
   const handleDelete = async () => {
-    try {
-      await deleteFromDB(item.id, 'activities');
-      Alert.alert('Deleted', 'Activity deleted successfully!');
-      navigation.goBack();
-    } catch (error) {
-      console.error('Failed to delete activity:', error);
-      Alert.alert('Error', 'Failed to delete activity');
-    }
+    Alert.alert(
+      'Delete',
+      'Are you sure you want to delete this item?',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Yes',
+          onPress: async () => {
+            try {
+              await deleteFromDB(item.id, 'activities');
+              Alert.alert('Deleted', 'Activity deleted successfully!');
+              navigation.goBack();
+            } catch (error) {
+              console.error('Failed to delete activity:', error);
+              Alert.alert('Error', 'Failed to delete activity');
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
