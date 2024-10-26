@@ -1,13 +1,13 @@
-import React, { useContext, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useContext, useLayoutEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ItemsList from '../Components/ItemsList';
-import { DietContext } from '../Context/DietContext';
 import { ThemeContext } from '../Context/ThemeContext';
+import { listenToCollection } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const Diet = ({ navigation }) => {
-  const { dietData } = useContext(DietContext);
   const { theme } = useContext(ThemeContext);
+  const [dietData, setDietData] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -25,6 +25,11 @@ const Diet = ({ navigation }) => {
       },
     });
   }, [navigation, theme]);
+
+  useEffect(() => {
+    const unsubscribe = listenToCollection('diet', setDietData);
+    return () => unsubscribe();
+  }, []);
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.background }]}>

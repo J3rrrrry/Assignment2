@@ -1,14 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { DietContext } from '../Context/DietContext';
 import { ThemeContext } from '../Context/ThemeContext';
+import { writeToDB } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const AddDietEntry = ({ navigation }) => {
-  const { setDietData } = useContext(DietContext);
   const { theme } = useContext(ThemeContext);
-
   const [description, setDescription] = useState('');
   const [calories, setCalories] = useState('');
   const [date, setDate] = useState(null);
@@ -27,41 +25,32 @@ const AddDietEntry = ({ navigation }) => {
     setShowDatePicker(prevState => !prevState);
   };
 
-  const validateAndSave = () => {
-    if (!description) {
-      Alert.alert('Error', 'Please enter a description.');
+  const validateAndSave = async () => {
+    if (!description || !calories || !date) {
+      Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
 
-    if (calories === '' || isNaN(calories)) {
-      Alert.alert('Error', 'Please enter a valid numeric calorie value.');
+    if (isNaN(calories)) {
+      Alert.alert('Error', 'Calories must be a numeric value.');
       return;
     }
 
-    if (calories <= 0) {
-      Alert.alert('Error', 'Calories must be greater than 0.');
-      return;
+    const newDietEntry = {
+      description,
+      calories: parseInt(calories),
+      date: date.toDateString(),
+      special: calories > 800,
+    };
+
+    try {
+      await writeToDB(newDietEntry, 'diet');
+      Alert.alert('Success', 'Diet entry added successfully!');
+      navigation.goBack();
+    } catch (error) {
+      console.error('Failed to add diet entry:', error);
+      Alert.alert('Error', 'Failed to add diet entry');
     }
-
-    if (!date) {
-      Alert.alert('Error', 'Please select a date.');
-      return;
-    }
-
-    const isSpecial = calories > 800;
-
-    setDietData(prev => [
-      ...prev,
-      {
-        id: Math.random().toString(),
-        description,
-        calories: parseInt(calories),
-        date: date.toDateString(),
-        special: isSpecial
-      }
-    ]);
-
-    navigation.goBack();
   };
 
   return (
@@ -140,7 +129,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
-    elevation: 2,
   },
   buttonText: {
     fontSize: 16,

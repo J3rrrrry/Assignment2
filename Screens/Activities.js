@@ -1,13 +1,13 @@
-import React, { useContext, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useContext, useLayoutEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ItemsList from '../Components/ItemsList';
-import { ActivityContext } from '../Context/ActivityContext';
 import { ThemeContext } from '../Context/ThemeContext';
+import { listenToCollection } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const Activities = ({ navigation }) => {
-  const { activityData } = useContext(ActivityContext);
   const { theme } = useContext(ThemeContext);
+  const [activityData, setActivityData] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -25,6 +25,11 @@ const Activities = ({ navigation }) => {
       },
     });
   }, [navigation, theme]);
+
+  useEffect(() => {
+    const unsubscribe = listenToCollection('activities', setActivityData);
+    return () => unsubscribe();
+  }, []);
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.background }]}>

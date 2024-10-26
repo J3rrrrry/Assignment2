@@ -2,14 +2,12 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { ActivityContext } from '../Context/ActivityContext';
 import { ThemeContext } from '../Context/ThemeContext';
+import { writeToDB } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 const AddActivity = ({ navigation }) => {
-  const { setActivityData } = useContext(ActivityContext);
   const { theme } = useContext(ThemeContext);
-
   const [activityType, setActivityType] = useState(null);
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState(null);
@@ -40,41 +38,32 @@ const AddActivity = ({ navigation }) => {
     setShowDatePicker(prevState => !prevState);
   };
 
-  const validateAndSave = () => {
-    if (!activityType) {
-      Alert.alert('Error', 'Please select an activity type.');
+  const validateAndSave = async () => {
+    if (!activityType || !duration || !date) {
+      Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
 
-    if (duration === '' || isNaN(duration)) {
-      Alert.alert('Error', 'Please enter a valid numeric duration.');
+    if (isNaN(duration)) {
+      Alert.alert('Error', 'Duration must be a numeric value.');
       return;
     }
 
-    if (duration <= 0) {
-      Alert.alert('Error', 'Duration must be greater than 0.');
-      return;
+    const newActivity = {
+      name: activityType,
+      duration: parseInt(duration, 10),
+      date: date.toDateString(),
+      special: (activityType === 'Running' || activityType === 'Weights') && duration > 60,
+    };
+
+    try {
+      await writeToDB(newActivity, 'activities');
+      Alert.alert('Success', 'Activity added successfully!');
+      navigation.goBack();
+    } catch (error) {
+      console.error('Failed to add activity:', error);
+      Alert.alert('Error', 'Failed to add activity');
     }
-
-    if (!date) {
-      Alert.alert('Error', 'Please select a date.');
-      return;
-    }
-
-    const isSpecial = (activityType === 'Running' || activityType === 'Weights') && duration > 60;
-
-    setActivityData(prev => [
-      ...prev,
-      {
-        id: Math.random().toString(),
-        name: activityType,
-        date: date.toDateString(),
-        value: `${duration} min`,
-        special: isSpecial
-      }
-    ]);
-
-    navigation.goBack();
   };
 
   return (
@@ -161,7 +150,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
-    elevation: 2,
   },
   buttonText: {
     fontSize: 16,

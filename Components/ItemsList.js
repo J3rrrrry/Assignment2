@@ -29,7 +29,7 @@ const ItemsList = ({ data }) => {
               {item.date}
             </Text>
             <Text style={[styles.itemValue, { backgroundColor: theme.white, color: theme.primary }]}>
-              {item.value || `${item.calories}`}
+              {item.duration ? `${item.duration} mins` : `${item.calories} kcal`}
             </Text>
           </View>
         </View>
