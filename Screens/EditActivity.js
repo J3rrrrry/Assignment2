@@ -79,7 +79,7 @@ const EditActivity = ({ navigation, route }) => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Text style={[styles.label, { color: theme.text }]}>Activity Type</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Activity *</Text>
       <DropDownPicker
         open={open}
         value={activityType}
@@ -91,7 +91,7 @@ const EditActivity = ({ navigation, route }) => {
         style={[styles.dropdown, { borderColor: theme.primary, backgroundColor: theme.white }]}
       />
 
-      <Text style={[styles.label, { color: theme.text }]}>Duration (min)</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Duration (min) *</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
@@ -99,7 +99,7 @@ const EditActivity = ({ navigation, route }) => {
         onChangeText={setDuration}
       />
 
-      <Text style={[styles.label, { color: theme.text }]}>Date</Text>
+      <Text style={[styles.label, { color: theme.text }]}>Date *</Text>
       <Pressable onPressIn={toggleDatePicker}>
         <View>
           <TextInput
@@ -122,8 +122,10 @@ const EditActivity = ({ navigation, route }) => {
         />
       )}
 
-      <View style={styles.checkboxContainer}>
-        <Text style={[styles.label, { color: theme.text }]}>Special Entry</Text>
+      <View style={styles.specialEntryContainer}>
+        <Text style={[styles.specialText, { color: theme.text }]}>
+          This item is marked as special. Select the checkbox if you would like to approve it.
+        </Text>
         <Switch
           value={special}
           onValueChange={(value) => setSpecial(value)}
@@ -133,11 +135,11 @@ const EditActivity = ({ navigation, route }) => {
       </View>
 
       <View style={styles.buttonContainer}>
+        <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.accent }]}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </Pressable>
         <Pressable onPress={validateAndSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
           <Text style={styles.buttonText}>Save</Text>
-        </Pressable>
-        <Pressable onPress={handleDelete} style={[styles.button, { backgroundColor: theme.accent }]}>
-          <Text style={styles.buttonText}>Delete</Text>
         </Pressable>
       </View>
     </View>
@@ -159,10 +161,18 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 5,
   },
-  checkboxContainer: {
+  dropdown: {
+    marginBottom: 20,
+  },
+  specialEntryContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 15,
+    justifyContent: 'space-between',
+    marginVertical: 20,
+  },
+  specialText: {
+    flex: 1,
+    fontSize: 14,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -170,8 +180,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
+    flex: 1,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    marginHorizontal: 5,
     borderRadius: 8,
   },
   buttonText: {

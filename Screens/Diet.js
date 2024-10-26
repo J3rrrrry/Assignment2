@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext, useLayoutEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import ItemsList from '../Components/ItemsList';
 import { ThemeContext } from '../Context/ThemeContext';
 import { listenToCollection } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Diet = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
@@ -13,7 +14,10 @@ const Diet = ({ navigation }) => {
     navigation.setOptions({
       headerRight: () => (
         <Pressable onPress={() => navigation.navigate('AddDietEntry')}>
-          <Text style={{ color: theme.buttonBlue, fontSize: 16, marginRight: 15 }}>Add</Text>
+          <View style={styles.iconContainer}>
+            <Ionicons name="add" size={20} color={theme.white} />
+            <MaterialCommunityIcons name="food" size={20} color={theme.white} />
+          </View>
         </Pressable>
       ),
       headerStyle: {
@@ -45,6 +49,10 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     paddingHorizontal: 20,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
