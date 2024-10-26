@@ -10,7 +10,7 @@ import EditDietEntry from './Screens/EditDietEntry';
 import EditActivity from './Screens/EditActivity';
 import Settings from './Screens/Settings';
 import { ThemeProvider, ThemeContext } from './Context/ThemeContext';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -85,13 +85,14 @@ const TabNavigator = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === 'DietTab') {
-            iconName = focused ? 'restaurant' : 'restaurant-outline';
+            return <MaterialCommunityIcons name="food" size={size} color={color} />;
           } else if (route.name === 'ActivitiesTab') {
             iconName = focused ? 'walk' : 'walk-outline';
+            return <Ionicons name={iconName} size={size} color={color} />;
           } else if (route.name === 'SettingsTab') {
             iconName = focused ? 'settings' : 'settings-outline';
+            return <Ionicons name={iconName} size={size} color={color} />;
           }
-          return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: theme.accent,
         tabBarInactiveTintColor: theme.gray,
