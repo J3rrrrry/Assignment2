@@ -25,6 +25,13 @@ const EditActivity = ({ navigation, route }) => {
     { label: 'Hiking', value: 'Hiking' },
   ]);
 
+  const toggleDatePicker = () => {
+    if (showDatePicker && !date) {
+      setDate(new Date());
+    }
+    setShowDatePicker((prevState) => !prevState);
+  };
+
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || new Date();
     setDate(currentDate);
