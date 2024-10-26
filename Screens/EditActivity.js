@@ -1,7 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TextInput, Alert, StyleSheet, Switch } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { Checkbox } from 'expo-checkbox';
 import { ThemeContext } from '../Context/ThemeContext';
 import { updateDB, deleteFromDB } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
@@ -15,6 +16,7 @@ const EditActivity = ({ navigation, route }) => {
   const [date, setDate] = useState(item ? new Date(item.date) : null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [special, setSpecial] = useState(item?.special || false);
+  const [approvedSpecial, setApprovedSpecial] = useState(false);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([
     { label: 'Walking', value: 'Walking' },
@@ -64,7 +66,7 @@ const EditActivity = ({ navigation, route }) => {
       name: activityType,
       duration: parseInt(duration, 10),
       date: date.toDateString(),
-      special,
+      special: approvedSpecial ? false : special,
     };
 
     try {
@@ -146,17 +148,18 @@ const EditActivity = ({ navigation, route }) => {
         />
       )}
 
-      <View style={styles.specialEntryContainer}>
-        <Text style={[styles.specialText, { color: theme.text }]}>
-          This item is marked as special. Select the checkbox if you would like to approve it.
-        </Text>
-        <Switch
-          value={special}
-          onValueChange={(value) => setSpecial(value)}
-          trackColor={{ false: theme.gray, true: theme.accent }}
-          thumbColor={special ? theme.primary : theme.white}
-        />
-      </View>
+      {special && (
+        <View style={styles.specialEntryContainer}>
+          <Text style={[styles.specialText, { color: theme.text }]}>
+            This item is marked as special. Select the checkbox if you would like to approve it.
+          </Text>
+          <Checkbox
+            value={approvedSpecial}
+            onValueChange={setApprovedSpecial}
+            color={approvedSpecial ? theme.accent : theme.gray}
+          />
+        </View>
+      )}
 
       <View style={styles.buttonContainer}>
         <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.accent }]}>
