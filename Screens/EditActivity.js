@@ -62,11 +62,13 @@ const EditActivity = ({ navigation, route }) => {
       return;
     }
 
+    const isSpecial = approvedSpecial ? false : (activityType === 'Running' || activityType === 'Weights') && parseInt(duration, 10) > 60;
+
     const updatedActivity = {
       name: activityType,
       duration: parseInt(duration, 10),
       date: date.toDateString(),
-      special: approvedSpecial ? false : special,
+      special: isSpecial,
     };
 
     try {
