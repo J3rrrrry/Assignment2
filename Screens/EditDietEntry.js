@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TextInput, Alert, StyleSheet, Switch } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Checkbox } from 'expo-checkbox';
 import { ThemeContext } from '../Context/ThemeContext';
 import { updateDB, deleteFromDB } from '../Firebase/firestoreHelper';
 import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
@@ -14,6 +15,7 @@ const EditDietEntry = ({ navigation, route }) => {
   const [date, setDate] = useState(item ? new Date(item.date) : null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [special, setSpecial] = useState(item?.special || false);
+  const [checkboxChecked, setCheckboxChecked] = useState(!special);
 
   useEffect(() => {
     navigation.setOptions({
@@ -53,7 +55,7 @@ const EditDietEntry = ({ navigation, route }) => {
       description,
       calories: parseInt(calories),
       date: date.toDateString(),
-      special,
+      special: !checkboxChecked,
     };
 
     try {
@@ -129,22 +131,25 @@ const EditDietEntry = ({ navigation, route }) => {
         />
       )}
 
-      <View style={styles.checkboxContainer}>
-        <Text style={[styles.label, { color: theme.text }]}>Special Entry</Text>
-        <Switch
-          value={special}
-          onValueChange={(value) => setSpecial(value)}
-          trackColor={{ false: theme.gray, true: theme.accent }}
-          thumbColor={special ? theme.primary : theme.white}
-        />
-      </View>
+      {special && (
+        <View style={styles.checkboxContainer}>
+          <Text style={[styles.label, { color: theme.text }]}>
+            This item is marked as special. Select the checkbox if you would like to approve it.
+          </Text>
+          <Checkbox
+            value={checkboxChecked}
+            onValueChange={(value) => setCheckboxChecked(value)}
+            color={checkboxChecked ? theme.accent : theme.gray}
+          />
+        </View>
+      )}
 
       <View style={styles.buttonContainer}>
+        <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.accent }]}>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </Pressable>
         <Pressable onPress={validateAndSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
           <Text style={styles.buttonText}>Save</Text>
-        </Pressable>
-        <Pressable onPress={handleDelete} style={[styles.button, { backgroundColor: theme.accent }]}>
-          <Text style={styles.buttonText}>Delete</Text>
         </Pressable>
       </View>
     </View>
@@ -177,8 +182,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
+    flex: 1,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    marginHorizontal: 5,
     borderRadius: 8,
   },
   buttonText: {
