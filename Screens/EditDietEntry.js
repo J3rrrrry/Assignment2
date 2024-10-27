@@ -15,7 +15,8 @@ const EditDietEntry = ({ navigation, route }) => {
   const [date, setDate] = useState(item ? new Date(item.date) : null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [special, setSpecial] = useState(item?.special || false);
-  const [checkboxChecked, setCheckboxChecked] = useState(!special);
+  const [checkboxChecked, setCheckboxChecked] = useState(false);
+  const showCheckbox = item?.special && item?.calories > 800;
 
   useEffect(() => {
     navigation.setOptions({
@@ -40,6 +41,10 @@ const EditDietEntry = ({ navigation, route }) => {
     setShowDatePicker((prevState) => !prevState);
   };
 
+  const handleCaloriesChange = (text) => {
+    setCalories(text);
+  };
+
   const validateAndSave = async () => {
     if (!description || !calories || !date) {
       Alert.alert('Error', 'Please fill in all fields.');
@@ -51,11 +56,17 @@ const EditDietEntry = ({ navigation, route }) => {
       return;
     }
 
+    if (parseInt(calories, 10) < 0) {
+        Alert.alert('Error', 'Calories must be a positive number.');
+        return;
+      }
+
+    const isSpecial = checkboxChecked ? false : parseInt(calories, 10) > 800;
     const updatedDietEntry = {
       description,
-      calories: parseInt(calories),
+      calories: parseInt(calories, 10),
       date: date.toDateString(),
-      special: !checkboxChecked,
+      special: isSpecial,
     };
 
     try {
@@ -117,7 +128,7 @@ const EditDietEntry = ({ navigation, route }) => {
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
         keyboardType="numeric"
         value={calories}
-        onChangeText={setCalories}
+        onChangeText={handleCaloriesChange}
       />
 
       <Text style={[styles.label, { color: theme.text }]}>Date</Text>
@@ -143,7 +154,7 @@ const EditDietEntry = ({ navigation, route }) => {
         />
       )}
 
-      {special && (
+      {showCheckbox && (
         <View style={styles.checkboxContainer}>
           <Text style={[styles.label, { color: theme.text }]}>
             This item is marked as special. Select the checkbox if you would like to approve it.
