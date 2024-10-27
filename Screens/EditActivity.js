@@ -62,6 +62,11 @@ const EditActivity = ({ navigation, route }) => {
       return;
     }
 
+    if (parseInt(duration, 10) < 0) {
+      Alert.alert('Error', 'Duration must be a positive number.');
+      return;
+    }
+
     const isSpecial = approvedSpecial ? false : (activityType === 'Running' || activityType === 'Weights') && parseInt(duration, 10) > 60;
 
     const updatedActivity = {
