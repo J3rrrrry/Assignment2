@@ -79,6 +79,18 @@ const EditActivity = ({ navigation, route }) => {
     }
   };
 
+  const confirmSave = () => {
+    Alert.alert(
+      "Important",
+      "Are you sure you want to save these changes?",
+      [
+        { text: "No", style: "cancel" },
+        { text: "Yes", onPress: validateAndSave },
+      ],
+      { cancelable: true }
+    );
+  };
+
   const handleDelete = async () => {
     Alert.alert(
       'Delete',
@@ -165,7 +177,7 @@ const EditActivity = ({ navigation, route }) => {
         <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.accent }]}>
           <Text style={styles.buttonText}>Cancel</Text>
         </Pressable>
-        <Pressable onPress={validateAndSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
+        <Pressable onPress={confirmSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
           <Text style={styles.buttonText}>Save</Text>
         </Pressable>
       </View>
