@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, TouchableWithoutFeedback, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { ActivityContext } from '../Context/ActivityContext';
 import { ThemeContext } from '../Context/ThemeContext';
+import { writeToDB } from '../Firebase/firestoreHelper';
+import Button from '../Components/Button';
+import { Pressable } from 'react-native';
 
 const AddActivity = ({ navigation }) => {
-  const { setActivityData } = useContext(ActivityContext);
   const { theme } = useContext(ThemeContext);
-
   const [activityType, setActivityType] = useState(null);
   const [duration, setDuration] = useState('');
   const [date, setDate] = useState(null);
@@ -31,49 +31,38 @@ const AddActivity = ({ navigation }) => {
   };
 
   const toggleDatePicker = () => {
-    if (showDatePicker) {
-      if (!date) {
-        setDate(new Date());
-      }
+    if (showDatePicker && !date) {
+      setDate(new Date());
     }
     setShowDatePicker(prevState => !prevState);
   };
 
-  const validateAndSave = () => {
-    if (!activityType) {
-      Alert.alert('Error', 'Please select an activity type.');
+  const validateAndSave = async () => {
+    if (!activityType || !duration || !date) {
+      Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
 
-    if (duration === '' || isNaN(duration)) {
-      Alert.alert('Error', 'Please enter a valid numeric duration.');
+    if (isNaN(duration)) {
+      Alert.alert('Error', 'Duration must be a numeric value.');
       return;
     }
 
-    if (duration <= 0) {
-      Alert.alert('Error', 'Duration must be greater than 0.');
-      return;
+    const newActivity = {
+      name: activityType,
+      duration: parseInt(duration, 10),
+      date: date.toDateString(),
+      special: (activityType === 'Running' || activityType === 'Weights') && duration > 60,
+    };
+
+    try {
+      await writeToDB(newActivity, 'activities');
+      Alert.alert('Success', 'Activity added successfully!');
+      navigation.goBack();
+    } catch (error) {
+      console.error('Failed to add activity:', error);
+      Alert.alert('Error', 'Failed to add activity');
     }
-
-    if (!date) {
-      Alert.alert('Error', 'Please select a date.');
-      return;
-    }
-
-    const isSpecial = (activityType === 'Running' || activityType === 'Weights') && duration > 60;
-
-    setActivityData(prev => [
-      ...prev,
-      {
-        id: Math.random().toString(),
-        name: activityType,
-        date: date.toDateString(),
-        value: `${duration} min`,
-        special: isSpecial
-      }
-    ]);
-
-    navigation.goBack();
   };
 
   return (
@@ -89,7 +78,6 @@ const AddActivity = ({ navigation }) => {
         placeholder="Select an activity type"
         style={[styles.dropdown, { borderColor: theme.primary, backgroundColor: theme.white }]}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Duration (min)</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
@@ -97,9 +85,8 @@ const AddActivity = ({ navigation }) => {
         value={duration}
         onChangeText={setDuration}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Date</Text>
-      <TouchableWithoutFeedback onPressIn={toggleDatePicker}>
+      <Pressable onPressIn={toggleDatePicker}>
         <View>
           <TextInput
             style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
@@ -109,8 +96,7 @@ const AddActivity = ({ navigation }) => {
             placeholder="Select a date"
           />
         </View>
-      </TouchableWithoutFeedback>
-
+      </Pressable>
       {showDatePicker && (
         <DateTimePicker
           value={date || new Date()}
@@ -120,10 +106,9 @@ const AddActivity = ({ navigation }) => {
           style={styles.datePicker}
         />
       )}
-
       <View style={styles.buttonContainer}>
-        <Button title="Cancel" onPress={() => navigation.goBack()} color={theme.buttonBlue} />
-        <Button title="Save" onPress={validateAndSave} color={theme.buttonBlue} />
+        <Button title="Cancel" onPress={() => navigation.goBack()} backgroundColor={theme.accent} />
+        <Button title="Save" onPress={validateAndSave} backgroundColor={theme.buttonBlue} />
       </View>
     </View>
   );
