@@ -1,12 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet, Pressable } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { Checkbox } from 'expo-checkbox';
 import { ThemeContext } from '../Context/ThemeContext';
 import { updateDB, deleteFromDB } from '../Firebase/firestoreHelper';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import Button from '../Components/Button';
 import { Ionicons } from '@expo/vector-icons';
+import { Checkbox } from 'expo-checkbox';
 
 const EditActivity = ({ navigation, route }) => {
   const { theme } = useContext(ThemeContext);
@@ -135,7 +135,6 @@ const EditActivity = ({ navigation, route }) => {
         placeholder="Select an activity type"
         style={[styles.dropdown, { borderColor: theme.primary, backgroundColor: theme.white }]}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Duration (min) *</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
@@ -143,7 +142,6 @@ const EditActivity = ({ navigation, route }) => {
         value={duration}
         onChangeText={setDuration}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Date *</Text>
       <Pressable onPressIn={toggleDatePicker}>
         <View>
@@ -156,7 +154,6 @@ const EditActivity = ({ navigation, route }) => {
           />
         </View>
       </Pressable>
-
       {showDatePicker && (
         <DateTimePicker
           value={date || new Date()}
@@ -166,7 +163,6 @@ const EditActivity = ({ navigation, route }) => {
           style={styles.datePicker}
         />
       )}
-
       {special && (
         <View style={styles.specialEntryContainer}>
           <Text style={[styles.specialText, { color: theme.text }]}>
@@ -179,14 +175,9 @@ const EditActivity = ({ navigation, route }) => {
           />
         </View>
       )}
-
       <View style={styles.buttonContainer}>
-        <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.accent }]}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Pressable>
-        <Pressable onPress={confirmSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
-          <Text style={styles.buttonText}>Save</Text>
-        </Pressable>
+        <Button title="Cancel" onPress={() => navigation.goBack()} backgroundColor={theme.accent} />
+        <Button title="Save" onPress={confirmSave} backgroundColor={theme.buttonBlue} />
       </View>
     </View>
   );
@@ -224,18 +215,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-  },
-  button: {
-    flex: 1,
-    paddingVertical: 10,
-    marginHorizontal: 5,
-    borderRadius: 8,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'white',
   },
   datePicker: {
     width: '100%',

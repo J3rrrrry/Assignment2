@@ -3,7 +3,8 @@ import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ThemeContext } from '../Context/ThemeContext';
 import { writeToDB } from '../Firebase/firestoreHelper';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import Button from '../Components/Button';
+import { Pressable } from 'react-native';
 
 const AddDietEntry = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
@@ -61,7 +62,6 @@ const AddDietEntry = ({ navigation }) => {
         value={description}
         onChangeText={setDescription}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Calories</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
@@ -69,7 +69,6 @@ const AddDietEntry = ({ navigation }) => {
         value={calories}
         onChangeText={setCalories}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Date</Text>
       <Pressable onPressIn={toggleDatePicker}>
         <View>
@@ -82,7 +81,6 @@ const AddDietEntry = ({ navigation }) => {
           />
         </View>
       </Pressable>
-
       {showDatePicker && (
         <DateTimePicker
           value={date || new Date()}
@@ -92,14 +90,9 @@ const AddDietEntry = ({ navigation }) => {
           style={styles.datePicker}
         />
       )}
-
       <View style={styles.buttonContainer}>
-        <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Pressable>
-        <Pressable onPress={validateAndSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
-          <Text style={styles.buttonText}>Save</Text>
-        </Pressable>
+        <Button title="Cancel" onPress={() => navigation.goBack()} backgroundColor={theme.accent} />
+        <Button title="Save" onPress={validateAndSave} backgroundColor={theme.buttonBlue} />
       </View>
     </View>
   );
@@ -124,17 +117,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-  },
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'white',
   },
   datePicker: {
     width: '100%',

@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TextInput, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Alert, StyleSheet, Pressable } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Checkbox } from 'expo-checkbox';
 import { ThemeContext } from '../Context/ThemeContext';
 import { updateDB, deleteFromDB } from '../Firebase/firestoreHelper';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import Button from '../Components/Button';
 import { Ionicons } from '@expo/vector-icons';
 
 const EditDietEntry = ({ navigation, route }) => {
@@ -38,7 +38,7 @@ const EditDietEntry = ({ navigation, route }) => {
     if (showDatePicker && !date) {
       setDate(new Date());
     }
-    setShowDatePicker((prevState) => !prevState);
+    setShowDatePicker(prevState => !prevState);
   };
 
   const handleCaloriesChange = (text) => {
@@ -57,9 +57,9 @@ const EditDietEntry = ({ navigation, route }) => {
     }
 
     if (parseInt(calories, 10) < 0) {
-        Alert.alert('Error', 'Calories must be a positive number.');
-        return;
-      }
+      Alert.alert('Error', 'Calories must be a positive number.');
+      return;
+    }
 
     const isSpecial = checkboxChecked ? false : parseInt(calories, 10) > 800;
     const updatedDietEntry = {
@@ -91,14 +91,15 @@ const EditDietEntry = ({ navigation, route }) => {
     );
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     Alert.alert(
       'Delete',
       'Are you sure you want to delete this item?',
       [
         { text: 'No', style: 'cancel' },
         {
-          text: 'Yes', onPress: async () => {
+          text: 'Yes',
+          onPress: async () => {
             try {
               await deleteFromDB(item.id, 'diet');
               Alert.alert('Deleted', 'Diet entry deleted successfully!');
@@ -107,7 +108,7 @@ const EditDietEntry = ({ navigation, route }) => {
               console.error('Failed to delete diet entry:', error);
               Alert.alert('Error', 'Failed to delete diet entry');
             }
-          }
+          },
         },
       ],
       { cancelable: true }
@@ -122,7 +123,6 @@ const EditDietEntry = ({ navigation, route }) => {
         value={description}
         onChangeText={setDescription}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Calories</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
@@ -130,7 +130,6 @@ const EditDietEntry = ({ navigation, route }) => {
         value={calories}
         onChangeText={handleCaloriesChange}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Date</Text>
       <Pressable onPressIn={toggleDatePicker}>
         <View>
@@ -143,7 +142,6 @@ const EditDietEntry = ({ navigation, route }) => {
           />
         </View>
       </Pressable>
-
       {showDatePicker && (
         <DateTimePicker
           value={date || new Date()}
@@ -153,7 +151,6 @@ const EditDietEntry = ({ navigation, route }) => {
           style={styles.datePicker}
         />
       )}
-
       {showCheckbox && (
         <View style={styles.checkboxContainer}>
           <Text style={[styles.label, { color: theme.text }]}>
@@ -166,14 +163,9 @@ const EditDietEntry = ({ navigation, route }) => {
           />
         </View>
       )}
-
       <View style={styles.buttonContainer}>
-        <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.accent }]}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Pressable>
-        <Pressable onPress={confirmSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
-          <Text style={styles.buttonText}>Save</Text>
-        </Pressable>
+        <Button title="Cancel" onPress={() => navigation.goBack()} backgroundColor={theme.accent} />
+        <Button title="Save" onPress={confirmSave} backgroundColor={theme.buttonBlue} />
       </View>
     </View>
   );
@@ -203,18 +195,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-  },
-  button: {
-    flex: 1,
-    paddingVertical: 10,
-    marginHorizontal: 5,
-    borderRadius: 8,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'white',
   },
   datePicker: {
     width: '100%',

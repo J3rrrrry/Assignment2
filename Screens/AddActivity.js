@@ -4,7 +4,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { ThemeContext } from '../Context/ThemeContext';
 import { writeToDB } from '../Firebase/firestoreHelper';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
+import Button from '../Components/Button';
+import { Pressable } from 'react-native';
 
 const AddActivity = ({ navigation }) => {
   const { theme } = useContext(ThemeContext);
@@ -30,10 +31,8 @@ const AddActivity = ({ navigation }) => {
   };
 
   const toggleDatePicker = () => {
-    if (showDatePicker) {
-      if (!date) {
-        setDate(new Date());
-      }
+    if (showDatePicker && !date) {
+      setDate(new Date());
     }
     setShowDatePicker(prevState => !prevState);
   };
@@ -79,7 +78,6 @@ const AddActivity = ({ navigation }) => {
         placeholder="Select an activity type"
         style={[styles.dropdown, { borderColor: theme.primary, backgroundColor: theme.white }]}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Duration (min)</Text>
       <TextInput
         style={[styles.input, { borderColor: theme.primary, backgroundColor: theme.white }]}
@@ -87,7 +85,6 @@ const AddActivity = ({ navigation }) => {
         value={duration}
         onChangeText={setDuration}
       />
-
       <Text style={[styles.label, { color: theme.text }]}>Date</Text>
       <Pressable onPressIn={toggleDatePicker}>
         <View>
@@ -100,7 +97,6 @@ const AddActivity = ({ navigation }) => {
           />
         </View>
       </Pressable>
-
       {showDatePicker && (
         <DateTimePicker
           value={date || new Date()}
@@ -110,14 +106,9 @@ const AddActivity = ({ navigation }) => {
           style={styles.datePicker}
         />
       )}
-
       <View style={styles.buttonContainer}>
-        <Pressable onPress={() => navigation.goBack()} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Pressable>
-        <Pressable onPress={validateAndSave} style={[styles.button, { backgroundColor: theme.buttonBlue }]}>
-          <Text style={styles.buttonText}>Save</Text>
-        </Pressable>
+        <Button title="Cancel" onPress={() => navigation.goBack()} backgroundColor={theme.accent} />
+        <Button title="Save" onPress={validateAndSave} backgroundColor={theme.buttonBlue} />
       </View>
     </View>
   );
@@ -145,17 +136,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
-  },
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'white',
   },
   datePicker: {
     width: '100%',
